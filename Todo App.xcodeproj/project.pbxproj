@@ -15,6 +15,7 @@
 		AF3E6F311CFB59E300CF6EAE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF3E6F2F1CFB59E300CF6EAE /* LaunchScreen.storyboard */; };
 		AF3E6F3C1CFB59E400CF6EAE /* Todo_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3E6F3B1CFB59E400CF6EAE /* Todo_AppTests.swift */; };
 		AF3E6F471CFB59E400CF6EAE /* Todo_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3E6F461CFB59E400CF6EAE /* Todo_AppUITests.swift */; };
+		AF3E6F551CFB5A7000CF6EAE /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3E6F541CFB5A7000CF6EAE /* CoreDataStackManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		AF3E6F421CFB59E400CF6EAE /* Todo AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Todo AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF3E6F461CFB59E400CF6EAE /* Todo_AppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo_AppUITests.swift; sourceTree = "<group>"; };
 		AF3E6F481CFB59E400CF6EAE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AF3E6F541CFB5A7000CF6EAE /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				AF3E6F2F1CFB59E300CF6EAE /* LaunchScreen.storyboard */,
 				AF3E6F321CFB59E300CF6EAE /* Info.plist */,
 				AF3E6F2A1CFB59E300CF6EAE /* Todo_App.xcdatamodeld */,
+				AF3E6F541CFB5A7000CF6EAE /* CoreDataStackManager.swift */,
 			);
 			path = "Todo App";
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF3E6F261CFB59E200CF6EAE /* ViewController.swift in Sources */,
+				AF3E6F551CFB5A7000CF6EAE /* CoreDataStackManager.swift in Sources */,
 				AF3E6F241CFB59E200CF6EAE /* AppDelegate.swift in Sources */,
 				AF3E6F2C1CFB59E300CF6EAE /* Todo_App.xcdatamodeld in Sources */,
 			);
