@@ -13,6 +13,7 @@ class AddTodoViewController: UIViewController {
 
     @IBOutlet weak var todoTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
+    @IBOutlet weak var editBtn: UIButton!
     
     var dateTodo: NSDate?
     var datePickerView: UIDatePicker?
@@ -37,6 +38,7 @@ class AddTodoViewController: UIViewController {
             
             todoTextField.text = todo!["todo"] as? String
             dateTextField.text = todo!["date"] as? String
+            editBtn.hidden = false
             
         } else {
             
@@ -44,11 +46,16 @@ class AddTodoViewController: UIViewController {
             
             todoTextField.text = ""
             dateTextField.text = ""
+            editBtn.hidden = true
+            
         }
     }
     
-    @IBAction func saveEdit(sender: AnyObject) {
-        print("Save Edit")
+    @IBAction func edit(sender: AnyObject) {
+        print("Edit")
+        
+        saveTodo((todo!["todo"] as? String)!, date: (todo!["date"] as? String)!)
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func save(sender: AnyObject) {
@@ -83,6 +90,77 @@ class AddTodoViewController: UIViewController {
             // error
             print("Todo: \(todo) error")
         }
+    }
+    
+    func saveTodo(todo: String, date: String) {
+        
+        fetchTodos(todo) { (array, arrayData) in
+            
+            var newDate = NSDate()
+            
+            let formatter = NSDateFormatter()
+            formatter.dateFormat = "MM dd, yyyy"
+            newDate = formatter.dateFromString(date)!
+            
+            arrayData.setValue(self.todoTextField.text, forKey: "todo")
+            arrayData.setValue(newDate, forKey: "date")
+        
+            // save new record and values
+            
+            do {
+                try self.context!.save()
+                
+                print("Todo: \(todo) successfully updated")
+                
+            } catch {
+                // error
+                print("Todo: \(todo) error")
+            }
+        }
+    }
+    
+    func fetchTodos(predicate: String, completion:(array: NSArray, arrayData: NSArray) -> ()) {
+        
+        var arr = [NSDictionary]()
+        var arrData = [NSManagedObject]()
+        
+        let request = NSFetchRequest(entityName: "Todo")
+        request.predicate = NSPredicate(format: "todo = %@", predicate)
+        
+        do {
+            let results = try context?.executeFetchRequest(request)
+            
+            for result in results as! [NSManagedObject] {
+                
+                let todo = result.valueForKey("todo") as? String
+                let date = result.valueForKey("date") as? NSDate
+                let completed = result.valueForKey("completed") as! Bool
+                
+                let dateStr = dateFormat(date!)
+                
+                let existingTodo = ["todo": todo!, "date": dateStr, "completed": completed]
+                
+                arr.append(existingTodo)
+                arrData.append(result)
+            }
+            
+            completion(array: arr, arrayData: arrData)
+            
+        } catch {
+            print("Error fetching results")
+        }
+    }
+    
+    func dateFormat(date: NSDate) -> String {
+        
+        var dateString: String?
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MM dd, yyyy"
+        
+        dateString = dateFormatter.stringFromDate(date)
+        
+        return dateString!
     }
     
     // DatePickerView

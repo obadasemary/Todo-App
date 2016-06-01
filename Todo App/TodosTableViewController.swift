@@ -154,6 +154,7 @@ class TodosTableViewController: UITableViewController {
         if segue.identifier == "addTodo" {
             
             inputVC.isTodoEditing = false
+//            inputVC.editBtn.hidden = true
         }
         
         if segue.identifier == "updateTodo" {
@@ -163,6 +164,7 @@ class TodosTableViewController: UITableViewController {
             
             inputVC.isTodoEditing = true
             inputVC.todo = todoSelected
+//            inputVC.editBtn.hidden = false
         }
         
         

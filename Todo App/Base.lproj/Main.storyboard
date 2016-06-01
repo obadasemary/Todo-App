@@ -108,12 +108,25 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tey-Uk-fpW">
+                                <rect key="frame" x="275" y="353" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="IEl-sj-iDW"/>
+                                    <constraint firstAttribute="height" constant="50" id="UJa-zV-tsv"/>
+                                </constraints>
+                                <state key="normal" title="Edit"/>
+                                <connections>
+                                    <action selector="edit:" destination="5Ql-AE-Muo" eventType="touchUpInside" id="gzS-Jd-mfm"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="meb-BF-FIX" firstAttribute="leading" secondItem="xrf-mf-Gs0" secondAttribute="leading" id="CEv-UI-98j"/>
+                            <constraint firstItem="Tey-Uk-fpW" firstAttribute="centerX" secondItem="xrf-mf-Gs0" secondAttribute="centerX" id="OkC-io-Dmd"/>
                             <constraint firstAttribute="trailing" secondItem="zLi-sF-TwL" secondAttribute="trailing" constant="20" id="QYw-GU-pAI"/>
                             <constraint firstItem="WbW-tt-TwM" firstAttribute="leading" secondItem="xrf-mf-Gs0" secondAttribute="leading" constant="25" id="SHv-Ul-iQs"/>
+                            <constraint firstItem="Tey-Uk-fpW" firstAttribute="top" secondItem="WbW-tt-TwM" secondAttribute="bottom" constant="40" id="VDA-Zn-W81"/>
                             <constraint firstItem="zLi-sF-TwL" firstAttribute="top" secondItem="meb-BF-FIX" secondAttribute="bottom" constant="56" id="hnN-Lk-Npw"/>
                             <constraint firstItem="WbW-tt-TwM" firstAttribute="top" secondItem="meb-BF-FIX" secondAttribute="bottom" constant="153" id="jl0-tz-DQf"/>
                             <constraint firstAttribute="trailing" secondItem="meb-BF-FIX" secondAttribute="trailing" id="mWa-RW-6Xr"/>
@@ -123,6 +136,7 @@
                     </view>
                     <connections>
                         <outlet property="dateTextField" destination="zLi-sF-TwL" id="yoM-OH-29f"/>
+                        <outlet property="editBtn" destination="Tey-Uk-fpW" id="xLX-Ao-UUC"/>
                         <outlet property="todoTextField" destination="WbW-tt-TwM" id="Aej-Xx-ZN9"/>
                     </connections>
                 </viewController>
