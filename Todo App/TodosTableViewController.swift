@@ -54,9 +54,20 @@ class TodosTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-
+        let isCompleted = todos[indexPath.row]["completed"] as? Bool == true
+        
         cell.textLabel?.text = todos[indexPath.row]["todo"] as? String
         cell.detailTextLabel?.text = todos[indexPath.row]["date"]! as? String
+        
+        if isCompleted {
+            
+            cell.accessoryType = .Checkmark
+            strikeThrough((todos[indexPath.row]["todo"] as? String)!, cell: cell.textLabel!)
+            
+        } else {
+            cell.accessoryType = .None
+            unStrikeThrough((todos[indexPath.row]["todo"] as? String)!, cell: cell.textLabel!)
+        }
 
         return cell
     }
@@ -75,7 +86,12 @@ class TodosTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
+            let todoToDelete = todos[indexPath.row]["todo"] as! String
+            deleteTodo(todoToDelete)
+            
+            todos.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -130,6 +146,29 @@ class TodosTableViewController: UITableViewController {
         }
     }
     
+    func deleteTodo(todo: String) {
+        
+        fetchTodos(todo) { (array, arrayData) in
+            
+            for result in arrayData {
+                
+                let aTodo = result.valueForKey("todo") as? String
+                
+                if aTodo == todo {
+                    self.context?.deleteObject(result as! NSManagedObject)
+                    
+                    do {
+                        try self.context!.save()
+                        print("\(todo) deleted")
+                        
+                    } catch {
+                        print("error deleting todo")
+                    }
+                }
+            }
+        }
+    }
+    
     func dateFormat(date: NSDate) -> String {
         
         var dateString: String?
@@ -140,6 +179,34 @@ class TodosTableViewController: UITableViewController {
         dateString = dateFormatter.stringFromDate(date)
         
         return dateString!
+    }
+    
+    // MARK: - Marking Todos as Completed
+    
+    func strikeThrough(todo: String, cell: UILabel) {
+        
+        let attributes = [
+            NSFontAttributeName: UIFont(name: "Arial", size: 17.0)!,
+            NSForegroundColorAttributeName: UIColor.orangeColor(),
+            NSStrikethroughStyleAttributeName: NSNumber(integer: NSUnderlineStyle.StyleSingle.rawValue)
+        ]
+        
+        let stringFormatted = NSAttributedString(string: todo, attributes: attributes)
+        
+        cell.attributedText = stringFormatted
+    }
+    
+    func unStrikeThrough(todo: String, cell: UILabel) {
+        
+        let attributes = [
+            NSFontAttributeName: UIFont(name: "Arial", size: 17.0)!,
+            NSForegroundColorAttributeName: UIColor.blackColor(),
+            NSStrikethroughStyleAttributeName: NSNumber(integer: 0)
+        ]
+        
+        let stringFormatted = NSAttributedString(string: todo, attributes: attributes)
+        
+        cell.attributedText = stringFormatted
     }
 
     

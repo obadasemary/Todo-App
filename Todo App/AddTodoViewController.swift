@@ -14,13 +14,14 @@ class AddTodoViewController: UIViewController {
     @IBOutlet weak var todoTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var editBtn: UIButton!
+    @IBOutlet weak var completedBtn: UIButton!
     
     var dateTodo: NSDate?
     var datePickerView: UIDatePicker?
     
     var context: NSManagedObjectContext?
     
-    var isTodoEditing: Bool?
+    var isTodoEditing: Bool = false
     var todo: NSDictionary?
     
     // MARK: - LifeCycel
@@ -39,6 +40,18 @@ class AddTodoViewController: UIViewController {
             todoTextField.text = todo!["todo"] as? String
             dateTextField.text = todo!["date"] as? String
             editBtn.hidden = false
+            completedBtn.hidden = false
+            
+            let btnToggle = isComplete(todoTextField.text!)
+            
+            if btnToggle == true {
+                
+                self.completedBtn.tintColor = UIColor.greenColor()
+                
+            } else {
+                
+                self.completedBtn.tintColor = UIColor.blackColor()
+            }
             
         } else {
             
@@ -47,29 +60,47 @@ class AddTodoViewController: UIViewController {
             todoTextField.text = ""
             dateTextField.text = ""
             editBtn.hidden = true
+            completedBtn.hidden = true
             
         }
+    }
+    
+     // MARK: - Actions
+    
+    @IBAction func completeTodoAction(sender: AnyObject) {
+        
+        markAsComplete((todo!["todo"] as? String)!)
     }
     
     @IBAction func edit(sender: AnyObject) {
         print("Edit")
         
-        saveTodo((todo!["todo"] as? String)!, date: (todo!["date"] as? String)!)
+
+        saveTodo((todo!["todo"] as? String)!, date: dateTodo!)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func save(sender: AnyObject) {
         
-        
-        addNewTodo(todoTextField.text!, date: dateTodo!)
-        
-        self.dismissViewControllerAnimated(true, completion: nil)
+        if todoTextField.text != "" && dateTextField.text != "" {
+            
+            addNewTodo(todoTextField.text!, date: dateTodo!)
+            self.dismissViewControllerAnimated(true, completion: nil)
+        } else if todoTextField.text != "" {
+            alertDialog("date")
+        } else if dateTextField.text != "" {
+            alertDialog("Todo")
+        } else if todoTextField.text == "" && dateTextField.text == "" {
+            alertDialog("Todo and Date")
+        }
     }
     
     @IBAction func cancel(sender: AnyObject) {
         
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+     // MARK: - CoreData Func
     
     func addNewTodo(todo: String, date: NSDate) {
         
@@ -92,18 +123,18 @@ class AddTodoViewController: UIViewController {
         }
     }
     
-    func saveTodo(todo: String, date: String) {
+    func saveTodo(todo: String, date: NSDate) {
         
         fetchTodos(todo) { (array, arrayData) in
             
-            var newDate = NSDate()
-            
-            let formatter = NSDateFormatter()
-            formatter.dateFormat = "MM dd, yyyy"
-            newDate = formatter.dateFromString(date)!
+//            var newDate = NSDate()
+//            
+//            let formatter = NSDateFormatter()
+//            formatter.dateFormat = "MM dd, yyyy"
+//            newDate = formatter.dateFromString(date)!
             
             arrayData.setValue(self.todoTextField.text, forKey: "todo")
-            arrayData.setValue(newDate, forKey: "date")
+            arrayData.setValue(date, forKey: "date")
         
             // save new record and values
             
@@ -151,6 +182,79 @@ class AddTodoViewController: UIViewController {
         }
     }
     
+    func markAsComplete(todoC: String) {
+        
+        fetchTodos(todoC) { (array, arrayData) in
+            
+            for result in arrayData {
+                
+                let todoValue = result.valueForKey("todo") as? String
+                let togoleCompleted = result.valueForKey("completed") as? Bool
+                
+                
+                if todoC == todoValue! {
+
+                    
+                    if togoleCompleted == true {
+                        
+                        result.setValue(false, forKey: "completed")
+                        self.completedBtn.tintColor = UIColor.blackColor()
+                        
+                    } else {
+                        
+                        result.setValue(true, forKey: "completed")
+                        self.completedBtn.tintColor = UIColor.greenColor()
+                    }
+                    
+                    do {
+                        try self.context!.save()
+                        
+                        print("Todo: \(todoC) marked as complete")
+                        
+                    } catch {
+                        // error
+                        print("Todo: \(todoC) error")
+                    }
+                    
+                }
+            }
+            
+        }
+    }
+    
+    func isComplete(todoC: String) -> Bool {
+        
+        var isCompleted: Bool?
+        
+        fetchTodos(todoC) { (array, arrayData) in
+            
+            for result in arrayData {
+                
+                let todoValue = result.valueForKey("todo") as? String
+                let togoleCompleted = result.valueForKey("completed") as? Bool
+                
+                
+                if todoC == todoValue {
+                    
+                    if togoleCompleted == true {
+                        
+                        isCompleted = true
+                        
+                    } else {
+                        
+                        isCompleted = false
+                    }
+                    
+                }
+                
+            }
+        }
+        
+        return isCompleted!
+    }
+    
+     // MARK: - DateFormat
+    
     func dateFormat(date: NSDate) -> String {
         
         var dateString: String?
@@ -163,7 +267,7 @@ class AddTodoViewController: UIViewController {
         return dateString!
     }
     
-    // DatePickerView
+    // MARK: - DatePickerView
     
     func datePicker() {
         
@@ -182,6 +286,26 @@ class AddTodoViewController: UIViewController {
         dateTextField.text = dateFormatter.stringFromDate(dateTodo!)
     }
 
+    
+    //Alert Dialog
+    
+    func alertDialog(message:String) {
+        
+        
+        let alertDialog = UIAlertController(title: "Fields Missing", message: "Please add \(message)", preferredStyle:.Alert)
+        
+        //ok Button
+        let ok = UIAlertAction(title: "OK", style: .Default) { (UIAlertAction) -> Void in
+            
+            //code
+        }
+        
+        alertDialog.addAction(ok)
+        
+        presentViewController(alertDialog , animated: true, completion: nil)
+        
+    }
+    
     /*
     // MARK: - Navigation
 

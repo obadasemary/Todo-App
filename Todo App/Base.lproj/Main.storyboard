@@ -119,6 +119,17 @@
                                     <action selector="edit:" destination="5Ql-AE-Muo" eventType="touchUpInside" id="gzS-Jd-mfm"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ln9-X0-eNr">
+                                <rect key="frame" x="499" y="427" width="76" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="57w-Nw-pE8"/>
+                                    <constraint firstAttribute="width" constant="76" id="6RZ-QO-QMI"/>
+                                </constraints>
+                                <state key="normal" title="Completed"/>
+                                <connections>
+                                    <action selector="completeTodoAction:" destination="5Ql-AE-Muo" eventType="touchUpInside" id="C9y-cE-xVz"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -130,11 +141,14 @@
                             <constraint firstItem="zLi-sF-TwL" firstAttribute="top" secondItem="meb-BF-FIX" secondAttribute="bottom" constant="56" id="hnN-Lk-Npw"/>
                             <constraint firstItem="WbW-tt-TwM" firstAttribute="top" secondItem="meb-BF-FIX" secondAttribute="bottom" constant="153" id="jl0-tz-DQf"/>
                             <constraint firstAttribute="trailing" secondItem="meb-BF-FIX" secondAttribute="trailing" id="mWa-RW-6Xr"/>
+                            <constraint firstItem="Ln9-X0-eNr" firstAttribute="top" secondItem="WbW-tt-TwM" secondAttribute="bottom" constant="114" id="pLJ-hS-182"/>
                             <constraint firstAttribute="trailing" secondItem="WbW-tt-TwM" secondAttribute="trailing" constant="25" id="rbf-2y-6z5"/>
                             <constraint firstItem="meb-BF-FIX" firstAttribute="top" secondItem="xrf-mf-Gs0" secondAttribute="top" id="yRN-Ke-tR5"/>
+                            <constraint firstAttribute="trailing" secondItem="Ln9-X0-eNr" secondAttribute="trailing" constant="25" id="zYX-AO-Byr"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="completedBtn" destination="Ln9-X0-eNr" id="uRn-rv-20G"/>
                         <outlet property="dateTextField" destination="zLi-sF-TwL" id="yoM-OH-29f"/>
                         <outlet property="editBtn" destination="Tey-Uk-fpW" id="xLX-Ao-UUC"/>
                         <outlet property="todoTextField" destination="WbW-tt-TwM" id="Aej-Xx-ZN9"/>
